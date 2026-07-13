@@ -1,0 +1,36 @@
+# day06_6_processing_python_friework_stroke_line_line
+# 修改自 day06_5_processing_python_friework_mousePressed_fill_r_g_b
+# 想做出可以互動的煙火，而且 mouse 可點很多次，還有不同色，殘影
+def setup():
+    size(500, 500)
+    
+r, g, b = [], [], []
+x, y = [], [] # 一開始的座標
+vx, vy = [], [] # 一開始也沒有速度
+gx, gy = 0, 0.0098 # 加速度
+N = 0 # 現在要有幾顆火花?
+
+def draw():
+    background(0)
+    ellipse(mouseX, mouseY, 10, 10)
+    for i in range(N):
+        fill(r[i], g[i], b[i]) # 加色彩的變數(隨機變色)
+        # ellipse(x[i], y[i], 10, 10) # 不要只畫圓形
+        stroke(r[i], g[i], b[i]) # 改成彩色線條
+        strokeWeight(5) #設訂線條寬度
+        line(x[i],y[i],x[i]+vx[i], y[i]+vy[i]) # 畫線到下一格位子
+        x[i] += vx[i]
+        y[i] += vy[i]
+        vx[i] += gx
+        vy[i] += gy
+        line(x[i],y[i],x[i]+vx[i], y[i]+vy[i]) # 畫線到下下一格位子
+def mousePressed(): # mouse按下去
+    global r, g, b, x, y, vx, vy, N 
+    r += [random(256)]*20
+    g += [random(256)]*20
+    b += [random(256)]*20
+    x += [mouseX]*20
+    y += [mouseY]*20
+    vx += [2*cos(PI*2/20*i)for i in range(20)]
+    vy += [2*sin(PI*2/20*i)for i in range(20)]
+    N += 20 # N 這裡有修改變數 N要記得用global
